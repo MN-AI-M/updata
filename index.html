@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bloxd Image Alchemy -Bloxd! Fox Mofu | High-Fidelity Pixel Art Converter</title>
+
+<meta name="description" content="Transform images into professional pixel art instantly with 340 blocks. The ultimate Bloxd.io converter. | 340種類のブロックで一瞬でドット絵へ変換。最高峰のBloxd.io用ツール。">
+
+<meta property="og:description" content="High-performance Bloxd.io pixel art converter.">
+<meta property="og:image" content="https://mn-ai-m.github.io/FOX-MOFU-alchemy-forge/icon.png">
+
+<link rel="icon" sizes="32x32" type="image/png" href="https://mn-ai-m.github.io/FOX-MOFU-alchemy-forge/icon.png">
+<link rel="apple-touch-icon" href="https://mn-ai-m.github.io/FOX-MOFU-alchemy-forge/icon.png">
+
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+}
+
+iframe {
+    width: 100%;
+    height: 100vh;
+    border: none;
+}
+
+#seo-content {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+}
+
+/* ロード画面 */
+#loading-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease;
+}
+
+.loading-text {
+    color: #555;
+    font-family: sans-serif;
+    letter-spacing: 2px;
+}
+/* 画面分割のコンテナ */
+#main-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* 変換画面（98%） */
+#converter-block {
+    flex: 98;
+    width: 100%;
+    border: none;
+    transition: all 0.5s ease;
+}
+
+/* 切り替えバー（2%） */
+#nav-block {
+    flex: 2;
+    background: #111;
+    border-top: 1px solid #00ffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+    z-index: 100;
+}
+#nav-block:hover { background: #222; }
+.nav-label { color: #00ffff; font-size: 10px; letter-spacing: 2px; font-family: sans-serif; }
+
+/* 投稿・ギャラリー画面（全画面で重なる） */
+#gallery-overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 200;
+    display: none; /* 初期は非表示 */
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.close-gallery {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: #ff0000;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 300;
+}
+</style>
+</head>
+
+<body>
+
+<div id="seo-content">
+<h1>Bloxd Image Alchemy - Fox Mofu</h1>
+
+<h2 class="lang-en">
+The Ultimate High-Performance Pixel Art Converter for Bloxd.io
+</h2>
+
+<h2 class="lang-ja">
+誰でも簡単に高品質のドット絵が作れる変換ツール
+</h2>
+
+<p class="lang-en">
+Powered by the CORE FORGE engine. Instantly calculates the best combination from 340 blocks.
+</p>
+
+<p class="lang-ja">
+340種類のブロックから最適な組み合わせを一瞬で計算。
+画像をアップロードするだけでプロ級のドット絵が完成します。
+</p>
+</div>
+
+<!-- 本体 -->
+<iframe id="converter-block"
+    src="https://foxmofuyt-fox-mofu-bloxd-image-alchemy.hf.space"
+    allow="accelerometer; camera; gyroscope; microphone; clipboard-read; clipboard-write; display-capture; downloads"
+    sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads">
+</iframe>
+<div id="loading-overlay">
+    <div style="text-align: center;">
+        <div class="alchemy-circle"></div> <div class="loading-text" style="font-size: 24px; color: #00ffff; text-shadow: 0 0 10px #00ffff;">
+            CORE FORGE LOADING...
+        </div>
+        <div style="color: #444; margin-top: 10px; font-size: 12px;">Initializing M4 Optimized Engine</div>
+    </div>
+</div>
+<div id="post-form" style="margin-bottom: 50px; border: 1px solid #444; padding: 20px; background: rgba(20,20,20,0.8); border-radius: 8px;">
+    <h3 style="color:#ddd; margin-top:0;">Share Your Alchemy</h3>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input type="password" id="gallery-pass" placeholder="管理用パスワード (Password)" 
+            style="background: #000; color: #00ffff; border: 1px solid #00ffff; padding: 10px; flex: 1; min-width: 200px;">
+        <button onclick="submitToGallery()" 
+            style="background: #00ffff; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer;">
+            世界に公開する / POST
+        </button>
+    </div>
+    <p style="font-size: 10px; color: #888; margin-top: 10px;">
+        ※最後に錬成したデータが送信されます。パスワードは暗号化して保存されます。
+    </p>
+</div>
+<div id="gallery-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+    <p style="color: #666; text-align: center; grid-column: 1/-1;">ロード中、または投稿がありません...</p>
+</div>
+<script>
+// ロード画面フェード
+window.addEventListener("load", function () {
+    setTimeout(function () {
+        const overlay = document.getElementById("loading-overlay");
+        overlay.style.opacity = "0";
+        setTimeout(() => overlay.style.display = "none", 1000);
+    }, 2000);
+});
+
+// 言語自動切替
+document.addEventListener("DOMContentLoaded", function () {
+    const userLang = navigator.language || navigator.userLanguage;
+
+    const enElements = document.querySelectorAll(".lang-en");
+    const jaElements = document.querySelectorAll(".lang-ja");
+
+    if (userLang.startsWith("ja")) {
+        enElements.forEach(el => el.style.display = "none");
+    } else {
+        jaElements.forEach(el => el.style.display = "none");
+    }
+});
+
+
+
+    async function loadGallery() {
+    // HF Datasetのrawデータを直接読み込む (CORS設定が必要)
+    const url = "https://huggingface.co/datasets/YourID/Forge-Data/raw/main/metadata.jsonl";
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const posts = text.split('\n').filter(line => line).map(JSON.parse);
+        
+        const galleryEl = document.getElementById('gallery-container');
+        galleryEl.innerHTML = posts.map(post => `
+            <div class="post-card">
+                <img src="${post.preview_url}" alt="Preview">
+                <button onclick="downloadZip('${post.zip_url}')">設計図を入手</button>
+            </div>
+        `).join('');
+    } catch (e) {
+        console.error("Gallery Load Failed", e);
+    }
+}
+
+
+    async function hashPassword(password) {
+    const msgUint8 = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+    function toggleGallery(show) {
+    const gallery = document.getElementById('gallery-overlay');
+    const converter = document.getElementById('converter-block');
+    const nav = document.getElementById('nav-block');
+
+    if (show) {
+        gallery.style.display = 'flex';
+        // 変換画面を物理的に消すことでMac MiniのCPU/GPU負荷を解放
+        converter.style.display = 'none';
+        nav.style.display = 'none'; // 看板も隠す
+        loadGallery(); 
+    } else {
+        gallery.style.display = 'none';
+        converter.style.display = 'block';
+        nav.style.display = 'flex';
+    }
+}
+
+// 投稿ボタンが押された時の挙動予測（概念）
+async function submitToGallery() {
+    const pass = document.getElementById('gallery-pass').value;
+    if(!pass) return alert("パスワードを入力してください");
+
+    // 1. パスワードをフロントエンドで即座にハッシュ化
+    const secureKey = await hashPassword(pass);
+    
+    // 2. HF側のデータ保存APIを叩く（ここにURLを入れる）
+    console.log("キー:", secureKey, "を送信します...");
+    // fetch('https://...', { method: 'POST', ... })
+}
+</script>
+
+</body>
+</html>

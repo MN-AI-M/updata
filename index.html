@@ -4,25 +4,118 @@
     <meta charset="UTF-8">
     <title>Core Forge - Alchemy Gallery & Post</title>
     <style>
-        body { background: #000; color: #00ffff; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; border: 1px solid #00ffff; padding: 20px; box-shadow: 0 0 15px #00ffff; }
-        h1 { text-align: center; letter-spacing: 5px; text-transform: uppercase; }
-        
-        .upload-section { border: 2px dashed #444; padding: 30px; text-align: center; margin-bottom: 20px; }
-        .input-group { margin: 15px 0; }
-        input[type="password"], input[type="text"] { 
-            background: #111; border: 1px solid #00ffff; color: #00ffff; padding: 10px; width: 100%; box-sizing: border-box; 
-        }
-        
-        button { 
-            background: #00ffff; color: #000; border: none; padding: 15px; width: 100%; font-weight: bold; 
-            cursor: pointer; transition: 0.3s; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
-        }
-        button:hover { background: #fff; box-shadow: 0 0 20px #fff; }
-        
-        #status-msg { margin-top: 20px; font-size: 12px; color: #ff00ff; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 30px; }
-    </style>
+    body, html { 
+        background: #000; 
+        color: #00ffff; 
+        font-family: 'Courier New', monospace; 
+        margin: 0; padding: 0; 
+        height: 100%; 
+        /* 錬成陣を背景に埋め込み（TEXTURE_DATA.pyと同じ画像を使う） */
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgc3Ryb2tlPSIjMDBmZmZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIHN0cm9rZS1vcGFjaXR5PSIwLjE5Ii8+PC9zdmc+');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .container { 
+        max-width: 800px; 
+        margin: 40px auto; 
+        /* サイバーなネオンフレーム */
+        border: 2px solid #00ffff; 
+        border-radius: 12px;
+        padding: 30px; 
+        background: rgba(10, 10, 15, 0.9);
+        box-shadow: 
+            0 0 30px rgba(0, 255, 255, 0.3),
+            inset 0 0 50px rgba(0, 255, 255, 0.1);
+        backdrop-filter: blur(5px); /* 背景の錬成陣を少しボカす */
+    }
+
+    h1 { 
+        text-align: center; 
+        letter-spacing: 10px; 
+        text-transform: uppercase; 
+        color: #fff; 
+        text-shadow: 0 0 15px #00ffff;
+        border-bottom: 2px solid transparent;
+        border-image: linear-gradient(to right, transparent, #00ffff, transparent) 1;
+        padding-bottom: 15px;
+    }
+    
+    .upload-section { 
+        border: 2px dashed rgba(0,255,255,0.4); 
+        padding: 30px; 
+        text-align: center; 
+        margin-bottom: 30px; 
+        border-radius: 8px;
+        background: rgba(0,255,255,0.02);
+    }
+    
+    .input-group { margin: 25px 0; }
+    
+    label {
+        color: rgba(0, 255, 255, 0.8);
+        font-size: 12px;
+        margin-bottom: 8px;
+        display: block;
+        letter-spacing: 2px;
+    }
+
+    input[type="password"], input[type="text"] { 
+        background: #000; 
+        border: 1px solid rgba(0, 255, 255, 0.3); 
+        color: #00ffff; 
+        padding: 12px; 
+        width: 100%; 
+        box-sizing: border-box; 
+        border-radius: 4px;
+        transition: 0.3s;
+    }
+    
+    input[type="password"]:focus, input[type="text"]:focus {
+        border-color: #00ffff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        outline: none;
+    }
+    
+    button { 
+        background: #00ffff; 
+        color: #000; 
+        border: none; 
+        padding: 18px; 
+        width: 100%; 
+        font-weight: bold; 
+        cursor: pointer; 
+        transition: 0.3s; 
+        font-size: 14px;
+        letter-spacing: 3px;
+        /* SF感のある角の切り取り（クリップ） */
+        clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    }
+    
+    button:hover { 
+        background: #fff; 
+        box-shadow: 0 0 30px #fff; 
+        color: #000;
+    }
+    
+    #status-msg { 
+        margin-top: 20px; 
+        font-size: 12px; 
+        color: #ff00ff; 
+        text-shadow: 0 0 10px #ff00ff;
+        text-align: center;
+        min-height: 1em;
+    }
+
+    .gallery-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+        gap: 20px; 
+        margin-top: 30px; 
+        padding-top: 30px;
+    }
+</style>
 </head>
 <body>
 
